@@ -20,6 +20,8 @@
   "dependencies": {
     "@amplitude/node": "^1.9.1",
     "@honeybadger-io/js": "^3.2.7",
+    "@slack/events-api": "^3.0.1",
+    "@slack/web-api": "^6.7.2",
     "@vendia/serverless-express": "^4.3.9",
     "aws-lambda": "^1.0.6",
     "aws-sdk": "^2.1046.0",
