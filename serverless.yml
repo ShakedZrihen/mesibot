@@ -1,0 +1,84 @@
+service: mesiBot
+
+frameworkVersion: '>=2.55.0 <3.0.0'
+variablesResolutionMode: 20210326
+#useDotenv: true
+provider:
+  name: aws
+  runtime: nodejs12.x
+  lambdaHashingVersion: 20201221
+  region: ${self:custom.env_config.REGION}
+  deploymentBucket:
+    name: mesibot-deployment-bucket-${opt:stage}
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - apigateway:*
+      Resource: '*'
+  apiGateway:
+    binaryMediaTypes: # Support svg as a return type
+      - '*/*'
+    # public api should be behind WAF, DO IT MANUALLY
+    usagePlan:
+      quota:
+        limit: 1000
+        offset: 0
+        period: DAY
+      throttle:
+        burstLimit: 200
+        rateLimit: 100
+  resourcePolicy:
+    - Effect: Allow
+      Principal: '*'
+      Action: execute-api:Invoke
+      Resource:
+        - execute-api:/*
+  environment: ${file(config/config.${opt:stage}.json)}
+  stackName: mesibot-api
+  apiName: mesibot-api
+  endpointType: regional
+  stage: ${opt:stage}
+  logs:
+    restApi:
+      level: INFO
+  vpc:
+    securityGroupIds:
+      - ${file(config/ssm.${opt:stage}.yml):SEC_GROUP}
+    subnetIds:
+      - ${file(config/ssm.${opt:stage}.yml):SUBNET1}
+      - ${file(config/ssm.${opt:stage}.yml):SUBNET2}
+
+custom:
+  env_config: ${file(config/config.${opt:stage}.json)}
+  serverless-offline:
+    httpPort: 555
+plugins:
+  - serverless-plugin-typescript
+  - serverless-plugin-git-variables
+  - serverless-domain-manager
+  - serverless-offline
+  - serverless-dynamodb-local
+
+functions:
+  mesibot:
+    role: arn:aws:iam::#{AWS::AccountId}:role/${self:custom.env_config.ROLE_NAME}
+    handler: src/handlers/mesibot.handler
+    reservedConcurrency: 10 # optional, reserved concurrency limit for this function. By default, AWS uses account concurrency limit
+    provisionedConcurrency: 1 # keep one hot vm
+    name: mesibot
+    memorySize: 256
+    timeout: 30
+    events:
+      - http:
+          path: '{proxy+}'
+          method: any
+          private: false
+          cors: false
+    # environment:
+
+package:
+  exclude:
+    - config/**
+    - tests/**
+  include:
+    - src/**/*

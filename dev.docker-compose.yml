@@ -1,0 +1,25 @@
+version: '3.1'
+services:
+  mesibot:
+    image: node:12.22.2-alpine
+    # --allowCache --useChildProcesses
+    command: sh -c "apk update && apk add git && ./node_modules/.bin/serverless offline --config serverless.yml --dockerHost host.docker.internal --dockerHostServicePath ${PWD} --host 0.0.0.0 --noPrependStageInUrl --stage local"
+    privileged: true
+    working_dir: /app
+    ports:
+      - '555:555'
+    container_name: mesibot
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - './node_modules:/app/node_modules'
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    cpus: 2
+    mem_limit: 8g
+    mem_reservation: 8g
+    oom_kill_disable: true
+    environment:
+      - configPath=.env
+networks:
+  default:

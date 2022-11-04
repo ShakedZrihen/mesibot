@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  localstack-mesibot:
+    image: localstack/localstack:latest
+    container_name: localstack-mesibot
+    env_file:
+      - .env-ci
+    ports:
+      - 4568:4566
+    environment:
+      SERVICES: dynamodb
+      DEFAULT_REGION: ${AWS_DEFAULT_REGION}
+      DATA_DIR: /tmp/localstack/data
+      DOCKER_HOST: unix:///var/run/docker.sock
+      HOSTNAME: localstack-mesibot
+      HOSTNAME_EXTERNAL: localstack-mesibot
+      LOCALSTACK_HOSTNAME: localstack-mesibot
+      LS_LOG: trace
+  init-dynamodb-table:
+    build:
+      context: .
+      dockerfile: initTable.Dockerfile
+    command: ./init-table.sh
+    depends_on:
+      - localstack-mesibot
+    env_file:
+      - .env-ci
+networks:
+  default:
