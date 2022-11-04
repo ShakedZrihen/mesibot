@@ -1,6 +1,6 @@
-const serverlessExpress = require('@vendia/serverless-express');
+import serverlessExpress from '@vendia/serverless-express';
 import { app } from '../app';
-
+console.log('here');
 // global variable server to keep hot in lambda
 // server is set at the first call and reused then
 // cache also db conn if any (such as postgres, for influx not required)

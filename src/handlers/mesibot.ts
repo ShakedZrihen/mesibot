@@ -1,4 +1,4 @@
-const serverlessExpress = require('@vendia/serverless-express');
+import serverlessExpress from '@vendia/serverless-express';
 import { app } from '../app';
 
 // global variable server to keep hot in lambda

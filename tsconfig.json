@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "target": "ES2017",
+    "allowJs": true,
+    "outDir": ".build",
+    "lib": ["es2017", "ES6"],
+    "sourceMap": true,
+    "rootDir": "./",
+    "types": ["node", "express", "jest"]
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "./node_modules", ".serverless/**/*"]
+}
