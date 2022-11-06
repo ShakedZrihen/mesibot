@@ -1,7 +1,13 @@
 import { Router } from 'express';
-import axios from 'axios';
-import { SPOTIFY_TOKEN } from '../../consts';
+import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../../consts';
+
 export const spotify = Router();
+const SpotifyWebApi = require('spotify-web-api-node');
+
+const spotifyApi = new SpotifyWebApi({
+  clientId: SPOTIFY_CLIENT_ID,
+  clientSecret: SPOTIFY_CLIENT_SECRET
+});
 
 spotify.post('/', async (req, res) => {
   const {
@@ -9,16 +15,13 @@ spotify.post('/', async (req, res) => {
   } = req;
   //   const searchQuery = JSON.parse(payload).value;
   //   console.log({ searchQuery });
-  const songsRes = await axios.get('https://api.spotify.com/v1/search', {
-    headers: {
-      Authorization: `Bearer ${SPOTIFY_TOKEN}`
-    },
-    params: {
-      q: 'gaga',
-      type: 'track'
-    }
+  await spotifyApi.clientCredentialsGrant().then((data) => {
+    spotifyApi.setAccessToken(data.body['access_token']);
   });
-  console.log({ songsRes });
+  const {
+    body: { tracks }
+  } = await spotifyApi.searchTracks(`track:lady`);
+  console.log({ tracks });
   return res.status(200).json({
     options: [
       {
