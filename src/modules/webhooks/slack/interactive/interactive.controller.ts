@@ -1,5 +1,7 @@
 import { Router } from 'express';
 import _ from 'lodash';
+import { addSongToPlaylist } from '../../../../common/dynamodb/handler';
+import { getSongById } from '../../../spotify/spotify.service';
 import { postAddSongSuccessMessage } from '../slack.service';
 import { createPlaylistModalHandler } from './interactions/createPlaylistModal';
 import interactionList from './interactive.consts';
@@ -13,7 +15,24 @@ const interactiveHandler = {
       interactionList.addSongModal.actions.songSearchbox
     ].selected_option;
     const songId: any = selectedSongObject.value;
+    const songFullData = await getSongById(songId);
     const songName = selectedSongObject.text.text;
+    await addSongToPlaylist({
+      channelId: payload.channel_id,
+      songInfo: {
+        album: {
+          name: songFullData.album.name,
+          id: songFullData.album.id,
+          uri: songFullData.album.uri,
+          images: songFullData.album.images
+        },
+        artists: songFullData.artists,
+        id: songFullData.id,
+        name: songFullData.name,
+        uri: songFullData.uri,
+        songByArtist: songName
+      }
+    });
     await postAddSongSuccessMessage({
       channel_id: payload.channel_id,
       blocks: [

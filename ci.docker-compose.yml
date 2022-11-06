@@ -17,6 +17,7 @@ services:
       HOSTNAME_EXTERNAL: localstack-mesibot
       LOCALSTACK_HOSTNAME: localstack-mesibot
       LS_LOG: trace
+      DYNAMODB_SHARE_DB: 1
   init-dynamodb-table:
     build:
       context: .

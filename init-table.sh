@@ -1,10 +1,8 @@
 #!/bin/bash
 #!/usr/bin/env bash
 
-sleep 5s
-
 mesibotVotesTableName='mesibot-votes'
-existing_table=$(aws --endpoint-url=http://localstack-moontower:4566 dynamodb list-tables | grep $mesibotVotesTableName | sed 's/ //g')
+existing_table=$(aws --endpoint-url=http://localstack-mesibot:4566 dynamodb list-tables | grep $mesibotVotesTableName | sed 's/ //g')
 if [ -z "$existing_table" ]; then
     aws --endpoint-url=http://localstack-mesibot:4566 dynamodb create-table \
         --table-name "$mesibotVotesTableName" \
