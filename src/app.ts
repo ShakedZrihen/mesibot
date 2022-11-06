@@ -2,8 +2,7 @@ import express from 'express';
 import boolParser from 'express-query-boolean';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
-import { webhooks } from './modules/webhooks/webhooks.controller';
-import { spotify } from './modules/spotify/spotify.controller';
+import defineRoutes from './routes';
 
 // initialize app
 export const app = express();
@@ -28,8 +27,7 @@ app.get('/health', async (req, res) => {
   return res.sendStatus(200);
 });
 
-app.use('/webhooks', webhooks);
-app.use('/spotify', spotify);
+defineRoutes(app);
 
 export default app;
 
