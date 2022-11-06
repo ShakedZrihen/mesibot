@@ -1,36 +1,17 @@
 //webhooks/slack/commands
 
 import { Router } from 'express';
-import { WebClient } from '@slack/web-api';
 import _ from 'lodash';
+import { create } from './create.command';
 
 export const commands = Router();
 
 const supportedCommands = {
-  create: async ({ channel_id, channel_name, user_name, text }) => {
-    let playlistName = text.split(' ');
-    playlistName.shift();
-    const createInNewChannel = playlistName.length >= 2 && playlistName.pop();
-    const message = `playlist name "${playlistName}" created for channel ${channel_name} by ${user_name}`;
-
-    // Initialize a single instance for the whole app
-    const web = new WebClient(
-      ''
-    );
-    if (createInNewChannel === 'new') {
-      console.log('Should create new channel');
-    }
-    const result = await web.chat.postMessage({
-      text: message,
-      channel: channel_id
-    });
-    return result;
-  }
+  create
 };
 
 commands.post('/', async (req, res) => {
   const { body } = req;
-  console.log(JSON.stringify(body, null, 2));
   /**
    * {
   "token": "ALjJVJTaEh57TPEX9WYUkvkm",
