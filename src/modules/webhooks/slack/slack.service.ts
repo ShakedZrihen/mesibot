@@ -1,6 +1,5 @@
 import { WebClient } from '@slack/web-api';
 import { SLACK_TOKEN } from '../../../consts';
-import { addSongsModalBlocks } from './commands/addSong.consts';
 import { generateHelpBlocks } from './commands/help.command';
 
 const web = new WebClient(SLACK_TOKEN);
