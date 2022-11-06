@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import _ from 'lodash';
-import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../../consts';
 import * as spotifyApi from './spotify.service';
 
 export const spotify = Router();
@@ -22,3 +21,8 @@ spotify.post('/', async (req, res) => {
     }))
   });
 });
+
+spotify.post('/get-playlist', spotifyApi.getPlaylist);
+spotify.post('/create-playlist', spotifyApi.createPlaylist);
+spotify.post('/add-track', spotifyApi.addTracksToPlaylist);
+spotify.post('/add-with-position', spotifyApi.addWithPostision);
