@@ -54,7 +54,7 @@ export const updateSongVote = async ({ channelId, songInfo }) => {
   const currentSong = currentPlaylist.songs?.filter(
     (song) => song.songByArtist === songInfo.songByArtist
   )?.[0];
-  currentSong.priority = currentSong.priority + songInfo?.priority;
+  currentSong.priority = (currentSong.priority || 0) + songInfo?.priority;
 
   const otherSongs = currentPlaylist.songs?.filter(
     (song) => song.songByArtist !== songInfo.songByArtist
