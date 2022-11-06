@@ -13,7 +13,8 @@ export const getSongFromSlackMessage = async ({ channel_id, ts }) => {
     limit: 1
   });
   // Print message text
-  console.log(result);
+  const songName = result.messages?.[0].text?.match(/\*(.*?)\*/);
+  return songName?.[1];
 };
 
 export const postHelpMessageToChannel = async ({

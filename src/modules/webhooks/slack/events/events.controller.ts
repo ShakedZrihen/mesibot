@@ -6,28 +6,37 @@ export const events = Router();
 
 const eventsHandlers = {
   reaction_removed: async (event) => {
-    console.log(event.type, event.user, event.reaction);
-    await getSongFromSlackMessage({
+    const songName = await getSongFromSlackMessage({
       channel_id: event.item.channel,
       ts: event.item.ts
     });
+    if (event.reaction === '-1') {
+      console.log(`Upvote by ${event.user} for song: ${songName}`);
+    }
+    if (event.reaction === '+1') {
+      console.log(`Downvote by ${event.user} for song: ${songName}`);
+    }
   },
   reaction_added: async (event) => {
-    console.log(event.type, event.user, event.reaction);
-    await getSongFromSlackMessage({
+    const songName = await getSongFromSlackMessage({
       channel_id: event.item.channel,
       ts: event.item.ts
     });
+    if (event.reaction === '-1') {
+      console.log(`Downvote by ${event.user} for song: ${songName}`);
+    }
+    if (event.reaction === '+1') {
+      console.log(`Upvote by ${event.user} for song: ${songName}`);
+    }
   }
 };
 events.post('/', async (req, res) => {
   const { body } = req;
-  console.log(body.event.type);
   const handler = _.get(eventsHandlers, body.event.type, _.noop);
   try {
     await handler(body.event);
   } catch (e) {
-    console.log({ e });
+    // console.log({ e });
   }
   res.sendStatus(200);
 });

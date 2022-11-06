@@ -8,8 +8,7 @@ const express_1 = __importDefault(require("express"));
 const express_query_boolean_1 = __importDefault(require("express-query-boolean"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
-const webhooks_controller_1 = require("./modules/webhooks/webhooks.controller");
-const spotify_controller_1 = require("./modules/spotify/spotify.controller");
+const routes_1 = __importDefault(require("./routes"));
 // initialize app
 exports.app = (0, express_1.default)();
 exports.app.set('trust proxy', 1);
@@ -26,7 +25,6 @@ exports.app.use(body_parser_1.default.urlencoded({ extended: true }));
 exports.app.get('/health', async (req, res) => {
     return res.sendStatus(200);
 });
-exports.app.use('/webhooks', webhooks_controller_1.webhooks);
-exports.app.use('/spotify', spotify_controller_1.spotify);
+(0, routes_1.default)(exports.app);
 exports.default = exports.app;
 //# sourceMappingURL=app.js.map
