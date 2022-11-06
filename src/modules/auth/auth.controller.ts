@@ -17,7 +17,7 @@ authRouter.get('/slack/grant/success', async (req, res) => {
     const { state, code } = req.query;
     const userDetails = await exchangeCodeForToken({ code, state });
     const userSlackId = _.get(userDetails, 'authed_user.id');
-    res.redirect(`http://localhost:3000/slack/grant/access/userSlackId=${userSlackId}`)
+    res.redirect(`http://localhost:3000/login?userSlackId=${userSlackId}`)
 })
 
 export default authRouter;
