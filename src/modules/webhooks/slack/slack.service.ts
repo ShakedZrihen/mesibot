@@ -5,6 +5,11 @@ import { generateHelpBlocks } from './commands/help.command';
 
 const web = new WebClient(SLACK_TOKEN);
 
+export const getUserProfile = async (user_id) => {
+  const result = await web.users.info({ user: user_id });
+  return result;
+};
+
 export const getSongFromSlackMessage = async ({ channel_id, ts }) => {
   const result = await web.conversations.history({
     channel: channel_id,
