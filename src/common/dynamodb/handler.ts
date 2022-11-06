@@ -20,12 +20,16 @@ export const addSongToPlaylist = async ({ channelId, songInfo }) => {
       session: {}
     };
   } else {
-    const songs = [...currentPlaylist?.songs, songInfo];
-    payload = {
-      channel_id: channelId,
-      songs,
-      session: {}
-    };
+    if(!currentPlaylist.songs.include(songInfo)){
+      const songs = [...currentPlaylist?.songs, songInfo];
+      payload = {
+        channel_id: channelId,
+        songs,
+        session: {}
+      };
+    } else {
+      return
+    }
   }
   await putItem(TABLES.MESIBOT_VOTES, payload);
   console.log(`add songs ${payload} to ${channelId} `);
