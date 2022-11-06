@@ -15,8 +15,11 @@ interactive.post('/', async (req, res) => {
     body: { payload }
   } = req;
   const parsedPayload = JSON.parse(payload);
-  console.log(JSON.stringify(parsedPayload, null, 2));
-  const handler = _.get(interactiveHandler, parsedPayload.callback_id, _.noop);
-  await handler(parsedPayload);
+  const handler = _.get(
+    interactiveHandler,
+    parsedPayload.view.callback_id,
+    _.noop
+  );
+  await handler({ payload: parsedPayload });
   res.sendStatus(204);
 });
