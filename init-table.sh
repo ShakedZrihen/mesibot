@@ -9,11 +9,9 @@ if [ -z "$existing_table" ]; then
     aws --endpoint-url=http://localstack-mesibot:4566 dynamodb create-table \
         --table-name "$mesibotVotesTableName" \
         --attribute-definitions \
-            AttributeName=playlistId,AttributeType=S \
-            AttributeName=songId,AttributeType=S \
+            AttributeName=channel_id,AttributeType=S \
         --key-schema \
-            AttributeName=playlistId,KeyType=HASH \
-            AttributeName=songId,KeyType=RANGE \
+            AttributeName=channel_id,KeyType=HASH \
         --provisioned-throughput \
             ReadCapacityUnits=5,WriteCapacityUnits=5
 fi

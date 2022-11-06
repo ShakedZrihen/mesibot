@@ -4,22 +4,28 @@ import * as dotenv from 'dotenv';
 dotenv.config({ path: process.env.configPath });
 
 function getEnv(varName, defaultValue?) {
-    let envVariable = process.env[varName];
-    if (!envVariable && defaultValue === undefined) {
-      throw new Error(`environment variable ${varName} is undefined`);
-    }
-    return envVariable || defaultValue;
+  let envVariable = process.env[varName];
+  if (!envVariable && defaultValue === undefined) {
+    throw new Error(`environment variable ${varName} is undefined`);
   }
-  
-  /**
-   * The current environment
-   */
-  export const ENV = getEnv('ENV', 'local');
+  return envVariable || defaultValue;
+}
 
-  /**
+/**
+ * The current environment
+ */
+export const ENV = getEnv('ENV', 'local');
+
+/**
  * pusher
  */
 export const PUSHER_APP_ID = getEnv('PUSHER_APP_ID');
 export const PUSHER_API_KEY = getEnv('PUSHER_API_KEY');
 export const PUSHER_API_SECRET = getEnv('PUSHER_API_SECRET');
 export const PUSHER_CLUSTER = getEnv('PUSHER_CLUSTER');
+
+/**
+ * Dynamo DB
+ */
+export const AWS_DEFAULT_REGION = getEnv('AWS_DEFAULT_REGION', null);
+export const AWS_DYNAMODB_ENDPOINT = getEnv('AWS_DYNAMODB_ENDPOINT', null);
