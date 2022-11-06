@@ -24,6 +24,7 @@ export const createModalBlocks = [
   },
   {
     type: 'input',
+    optional: true,
     element: {
       type: 'multi_users_select',
       placeholder: {
@@ -88,12 +89,12 @@ export const createModalBlocks = [
   }
 ];
 
-export const create = async ({ trigger_id }) => {
+export const create = async ({ trigger_id, channel_id }) => {
   try {
     await openCreatePlaylisyModal({
       trigger_id,
       createModalBlocks,
-      callback_id: interactionList.createPlaylistModal.callbackId
+      callback_id: `${interactionList.createPlaylistModal.callbackId}-${channel_id}`
     });
   } catch (e) {
     console.log(e);

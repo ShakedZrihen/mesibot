@@ -1,6 +1,5 @@
 import { Router } from 'express';
 import _ from 'lodash';
-import { postHelpMessageToChannel } from '../slack.service';
 import { createPlaylistModalHandler } from './interactions/createPlaylistModal';
 import interactionList from './interactive.consts';
 
@@ -11,15 +10,17 @@ const interactiveHandler = {
 };
 
 interactive.post('/', async (req, res) => {
-  const {
-    body: { payload }
-  } = req;
-  const parsedPayload = JSON.parse(payload);
-  const handler = _.get(
-    interactiveHandler,
-    parsedPayload.view.callback_id,
-    _.noop
-  );
-  await handler({ payload: parsedPayload });
-  res.sendStatus(204);
+  try {
+    const {
+      body: { payload }
+    } = req;
+    const parsedPayload = JSON.parse(payload);
+    const callbackId = parsedPayload.view.callback_id.split('-'); // [0] - callbackId, [1] - currentChannel
+    const handler = _.get(interactiveHandler, callbackId[0], _.noop);
+    await handler({ payload: { ...parsedPayload, channel_id: callbackId[1] } });
+    res.sendStatus(204);
+  } catch (e) {
+    console.log(e);
+    res.sendStatus(400);
+  }
 });

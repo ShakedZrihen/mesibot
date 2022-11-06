@@ -3,6 +3,7 @@ import boolParser from 'express-query-boolean';
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import { webhooks } from './modules/webhooks/webhooks.controller';
+import { spotify } from './modules/spotify/spotify.controller';
 
 // initialize app
 export const app = express();
@@ -28,5 +29,6 @@ app.get('/health', async (req, res) => {
 });
 
 app.use('/webhooks', webhooks);
+app.use('/spotify', spotify);
 
 export default app;

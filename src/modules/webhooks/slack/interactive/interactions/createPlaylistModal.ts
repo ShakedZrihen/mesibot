@@ -1,3 +1,7 @@
+import {
+  createNewPlaylistChannel,
+  postHelpMessageToChannel
+} from '../../slack.service';
 import interactionList from '../interactive.consts';
 
 const extractPlaylistNameFromState = (state) =>
@@ -12,13 +16,24 @@ const extractSelectedChannel = (state) =>
 
 export const createPlaylistModalHandler = async ({ payload }) => {
   const state = Object.values(payload.view.state.values);
+  console.log(payload);
   const playlistName = extractPlaylistNameFromState(state);
   const usersToAdd = extractUsersToAddFromState(state);
   const selectedChannel = extractSelectedChannel(state);
-  console.log({
-    playlistName,
-    usersToAdd,
-    selectedChannel,
-    payload: JSON.stringify(payload, null, 2)
-  });
+  if (
+    selectedChannel ===
+    interactionList.createPlaylistModal.actions.selectedChannel.options
+      .currentChannel
+  ) {
+    await postHelpMessageToChannel({
+      channel_id: payload.channel_id,
+      user_name: payload.user.username
+    });
+  } else {
+    await createNewPlaylistChannel({
+      channelName: playlistName,
+      usersToAdd,
+      userName: payload.user.username
+    });
+  }
 };

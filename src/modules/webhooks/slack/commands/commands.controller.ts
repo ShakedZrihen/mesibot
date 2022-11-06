@@ -2,12 +2,22 @@
 
 import { Router } from 'express';
 import _ from 'lodash';
+import { openAddSongModal } from '../slack.service';
+import { addSongsModalBlocks } from './addSong.consts';
 import { create } from './create.command';
+import interactionList from '../interactive/interactive.consts';
 
 export const commands = Router();
 
 const supportedCommands = {
-  create
+  create,
+  'add-song': async ({ trigger_id, channel_id }) => {
+    await openAddSongModal({
+      trigger_id,
+      addSongsModalBlocks,
+      callback_id: `${interactionList.addSongModal.callbackId}-${channel_id}`
+    });
+  }
 };
 
 commands.post('/', async (req, res) => {
