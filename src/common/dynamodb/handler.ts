@@ -20,7 +20,9 @@ export const addSongToPlaylist = async ({ channelId, songInfo }) => {
       session: {}
     };
   } else {
-    if(!currentPlaylist.songs.include(songInfo)){
+    if (
+      !currentPlaylist.songs.filter(({ uri }) => songInfo.uri === uri).length
+    ) {
       const songs = [...currentPlaylist?.songs, songInfo];
       payload = {
         channel_id: channelId,
@@ -28,7 +30,7 @@ export const addSongToPlaylist = async ({ channelId, songInfo }) => {
         session: {}
       };
     } else {
-      return
+      return;
     }
   }
   await putItem(TABLES.MESIBOT_VOTES, payload);
@@ -37,18 +39,16 @@ export const addSongToPlaylist = async ({ channelId, songInfo }) => {
 
 export const getPlaylistItems = async ({ channelId }) => {
   if (!channelId) {
-    console.log(
-        `Details were missing: channelId=${channelId}`
-    );
+    console.log(`Details were missing: channelId=${channelId}`);
     return;
   }
   const currentPlaylist = await getItem(TABLES.MESIBOT_VOTES, {
     channel_id: channelId
   }).catch(console.error);
   if (currentPlaylist) {
-      return currentPlaylist.songs
+    return currentPlaylist.songs;
   } else {
-    return
+    return;
   }
 };
 

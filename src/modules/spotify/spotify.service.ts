@@ -1,3 +1,5 @@
+import _ from 'lodash';
+import { getPlaylistItems } from '../../common/dynamodb/handler';
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../../consts';
 
 const SpotifyWebApi = require('spotify-web-api-node');
@@ -78,4 +80,24 @@ export const addWithPostision = async (req, res) => {
   );
   console.log('response: ', data.body);
   return res.status(200).json({});
+};
+
+export const getPlaylistSongs = async (playlistId) => {
+  const songs = await getPlaylistItems({ channelId: playlistId });
+  console.log({ songs });
+  const mappedSongs = _.reverse(
+    _.sortBy(
+      songs.map((song) => (song.priority ? song : { ...song, priority: 0 })),
+      ['priority']
+    )
+  ).map(({ name, artists, uri, album, priority }) => {
+    return {
+      name,
+      artist: artists[0].name,
+      uri,
+      image: album.images[album.images.length - 1].url,
+      priority
+    };
+  });
+  return mappedSongs;
 };

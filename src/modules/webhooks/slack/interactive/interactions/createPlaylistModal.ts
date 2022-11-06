@@ -1,5 +1,6 @@
 import {
   createNewPlaylistChannel,
+  openChannel,
   postHelpMessageToChannel
 } from '../../slack.service';
 import interactionList from '../interactive.consts';
@@ -36,7 +37,7 @@ export const createPlaylistModalHandler = async ({ payload }) => {
   } else {
     await createNewPlaylistChannel({
       channelName: playlistName,
-      usersToAdd,
+      usersToAdd: [...usersToAdd, payload.user.id],
       userName: payload.user.username
     });
   }

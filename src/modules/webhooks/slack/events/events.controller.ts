@@ -43,7 +43,7 @@ const eventsHandlers = {
         channelId: event.item.channel,
         songInfo: {
           songByArtist: songName,
-          priority: Number(event.reaction) * -1
+          priority: Number(event.reaction)
         }
       });
     }

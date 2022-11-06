@@ -4,6 +4,9 @@ import { generateHelpBlocks } from './commands/help.command';
 
 const web = new WebClient(SLACK_TOKEN);
 
+export const openChannel = async (channelId) => {
+  await web.conversations.open({ channel: channelId });
+};
 export const getUserProfile = async (user_id) => {
   const result = await web.users.info({ user: user_id });
   return result;
