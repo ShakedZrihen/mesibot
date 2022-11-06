@@ -15,8 +15,12 @@ const extractSelectedChannel = (state) =>
     .selected_option.value;
 
 export const createPlaylistModalHandler = async ({ payload }) => {
+  if (payload.type !== 'view_submission') {
+    console.log(payload.type, 'is not submit');
+    return;
+  }
   const state = Object.values(payload.view.state.values);
-  console.log(payload);
+  // console.log(payload);
   const playlistName = extractPlaylistNameFromState(state);
   const usersToAdd = extractUsersToAddFromState(state);
   const selectedChannel = extractSelectedChannel(state);

@@ -5,6 +5,17 @@ import { generateHelpBlocks } from './commands/help.command';
 
 const web = new WebClient(SLACK_TOKEN);
 
+export const getSongFromSlackMessage = async ({ channel_id, ts }) => {
+  const result = await web.conversations.history({
+    channel: channel_id,
+    latest: ts,
+    inclusive: true,
+    limit: 1
+  });
+  // Print message text
+  console.log(result);
+};
+
 export const postHelpMessageToChannel = async ({
   channel_id,
   user_name,
@@ -18,6 +29,18 @@ export const postHelpMessageToChannel = async ({
   return result;
 };
 
+export const postAddSongSuccessMessage = async ({
+  channel_id,
+  text = '',
+  blocks
+}: any) => {
+  const result = await web.chat.postMessage({
+    text,
+    blocks,
+    channel: channel_id
+  });
+  return result;
+};
 export const openCreatePlaylisyModal = async ({
   trigger_id,
   createModalBlocks,
@@ -53,15 +76,20 @@ export const createNewPlaylistChannel = async ({
   const response = await web.conversations.create({
     name: channelName.replace(/ /g, '-')
   });
-  await web.conversations.invite({
-    users: usersToAdd.join(','),
-    channel: response.channel!.id!
-  });
-  await postHelpMessageToChannel({
-    channel_id: response.channel!.id!,
-    user_name: userName
-  });
-  return response.channel;
+  try {
+    await web.conversations.invite({
+      users: usersToAdd.join(','),
+      channel: response.channel!.id!
+    });
+    await postHelpMessageToChannel({
+      channel_id: response.channel!.id!,
+      user_name: userName
+    });
+    return response.channel;
+  } catch (e) {
+    console.log({ e });
+    await web.conversations.archive({ channel: response.channel!.id! });
+  }
 };
 
 export const openAddSongModal = async ({

@@ -8,7 +8,8 @@ export const addSongsModalBlocks = [
         text: 'Select song',
         emoji: true
       },
-      action_id: 'song-searchbox'
+      action_id: 'song-searchbox',
+      
     },
     label: {
       type: 'plain_text',

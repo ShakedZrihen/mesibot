@@ -14,6 +14,9 @@ export default {
     }
   },
   addSongModal: {
-    callbackId: 'addSongModal'
+    callbackId: 'addSongModal',
+    actions: {
+      songSearchbox: 'song-searchbox'
+    }
   }
 };
