@@ -4,5 +4,9 @@
   "HOSTED_ZONE_ID": "",
   "AWS_DYNAMODB_ENDPOINT": "http://localstack-mesibot:4566",
   "AWS_DEFAULT_REGION": "us-west-1",
-  "ROLE_NAME": "local"
+  "ROLE_NAME": "local",
+  "PUSHER_APP_ID": 1502377,
+  "PUSHER_API_KEY": "c56e77b988119871f7d3",
+  "PUSHER_API_SECRET": "1c384e9d103f926cb170",
+  "PUSHER_CLUSTER": "mt1"
 }
