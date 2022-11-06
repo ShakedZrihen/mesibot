@@ -35,6 +35,23 @@ export const addSongToPlaylist = async ({ channelId, songInfo }) => {
   console.log(`add songs ${payload} to ${channelId} `);
 };
 
+export const getPlaylistItems = async ({ channelId }) => {
+  if (!channelId) {
+    console.log(
+        `Details were missing: channelId=${channelId}`
+    );
+    return;
+  }
+  const currentPlaylist = await getItem(TABLES.MESIBOT_VOTES, {
+    channel_id: channelId
+  }).catch(console.error);
+  if (currentPlaylist) {
+      return currentPlaylist.songs
+  } else {
+    return
+  }
+};
+
 const compareVotes = (firstSong, secondSong) => {
   return firstSong.priority - secondSong.priority;
 };
