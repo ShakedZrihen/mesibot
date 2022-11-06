@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../../consts';
+import { playSong } from './spotify.service';
 
 export const spotify = Router();
 const SpotifyWebApi = require('spotify-web-api-node');
@@ -39,3 +40,5 @@ spotify.post('/', async (req, res) => {
     ]
   });
 });
+
+spotify.post('/playSong', playSong)
