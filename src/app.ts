@@ -33,4 +33,3 @@ app.use('/spotify', spotify);
 
 export default app;
 
-//tomer comment for test - 1
