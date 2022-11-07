@@ -73,7 +73,7 @@ spotify.get('/redirect', (req, res) => {
       form: {
         code,
         grant_type: 'authorization_code',
-        redirect_uri: 'https://mesibot.ngrok.io/spotify/redirect'
+        redirect_uri: 'http://localhost:3000'
       },
       json: true
     },
@@ -94,6 +94,6 @@ spotify.get('/grant', async (req, res) => {
     'user-top-read'
   ].join(',');
   res.redirect(
-    `https://accounts.spotify.com/authorize?response_type=code&client_id=a3a224d8b0ad478bb1cbf06daf921902&scope=${scopes}&redirect_uri=https://mesibot.ngrok.io/spotify/redirect`
+    `https://accounts.spotify.com/authorize?response_type=code&client_id=a3a224d8b0ad478bb1cbf06daf921902&scope=${scopes}&redirect_uri=http://localhost:3000`
   );
 });
