@@ -6,7 +6,7 @@ import {
   PUSHER_CLUSTER
 } from '../../common/env';
 
-export const PusherClient = new Pusher({
+const PusherClient: any = new Pusher({
   appId: PUSHER_APP_ID,
   key: PUSHER_API_KEY,
   secret: PUSHER_API_SECRET,
