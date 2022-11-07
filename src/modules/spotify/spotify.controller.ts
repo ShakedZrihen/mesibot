@@ -19,7 +19,7 @@ spotify.post('/', async (req, res) => {
     options: _.uniqBy(tracks.items, ({ name }) => name).map((song: any) => ({
       text: {
         type: 'plain_text',
-        text: `${song.name!} by ${song.artists[0]?.name}`
+        text: `${song.name!} by ${song.artists?.[0]?.name || song.artists}`
       },
       value: song.id
     }))

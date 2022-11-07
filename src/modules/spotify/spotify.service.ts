@@ -83,8 +83,8 @@ export const addWithPostision = async (req, res) => {
   return res.status(200).json({});
 };
 
-export const mapSongs = async (songs) =>
-  await Promise.all(
+export const mapSongs = async (songs) => {
+  return await Promise.all(
     songs.map(
       async ({
         name,
@@ -103,7 +103,7 @@ export const mapSongs = async (songs) =>
         }
         return {
           name,
-          artist: artists[0].name,
+          artist: artists?.[0].name || artists,
           uri,
           image: album.images[album.images.length - 1].url,
           priority,
@@ -118,6 +118,7 @@ export const mapSongs = async (songs) =>
       }
     )
   );
+};
 
 export const getPlaylistSongs = async (playlistId) => {
   const songs = (await getPlaylistItems({ channelId: playlistId })) || [];

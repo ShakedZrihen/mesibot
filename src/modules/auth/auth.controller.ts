@@ -28,7 +28,7 @@ authRouter.get('/slack/grant/success', async (req, res) => {
   console.log({ userDetails });
   const userSlackId = _.get(userDetails, 'authed_user.id');
   console.log({ userSlackId });
-  res.redirect(`http://localhost:3000/login?userSlackId=${userSlackId}`);
+  res.redirect(`https://mesibot-ui.ngrok.io/login?userSlackId=${userSlackId}`);
 });
 
 export default authRouter;

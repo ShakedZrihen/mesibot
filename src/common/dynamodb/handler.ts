@@ -40,6 +40,7 @@ export const addSongToPlaylist = async ({ channelId, songInfo }) => {
   }
   await putItem(TABLES.MESIBOT_VOTES, payload);
   console.log(`add songs ${payload} to ${channelId} `);
+  return { ...songInfo, inserted_index: currentPlaylist?.songs.length };
 };
 
 export const getPlaylistItems = async ({ channelId }) => {
@@ -80,7 +81,7 @@ export const updateSongVote = async ({ channelId, songInfo, pusher }) => {
   const currentSong = currentPlaylist.songs?.filter(
     (song) => song.songByArtist === songInfo.songByArtist
   )?.[0];
-  currentSong.priority = (currentSong.priority || 0) + songInfo?.priority;
+  currentSong.priority = (currentSong.priority || 1000) + songInfo?.priority;
 
   const otherSongs = currentPlaylist.songs?.filter(
     (song) => song.songByArtist !== songInfo.songByArtist
@@ -89,7 +90,11 @@ export const updateSongVote = async ({ channelId, songInfo, pusher }) => {
   currentPlaylist.songs = songs;
 
   await putItem(TABLES.MESIBOT_VOTES, currentPlaylist);
-  const mappedSongsForUI = await mapSongs(songs);
-  pusher.trigger(channelId, spotifyEvents.UPDATE_PLAYLIST, mappedSongsForUI);
+  // const mappedSongsForUI = await mapSongs(songs);
+  pusher.trigger(
+    channelId,
+    songInfo?.priority > 0 ? spotifyEvents.LIKE : spotifyEvents.DISLIKE,
+    currentSong
+  );
   console.log(`update songs ${currentPlaylist} to ${channelId} `);
 };
