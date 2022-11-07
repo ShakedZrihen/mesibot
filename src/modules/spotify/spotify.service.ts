@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { getPlaylistItems } from '../../common/dynamodb/handler';
 import { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } from '../../consts';
+import { getUserProfile } from '../webhooks/slack/slack.service';
 
 const SpotifyWebApi = require('spotify-web-api-node');
 
@@ -84,20 +85,33 @@ export const addWithPostision = async (req, res) => {
 
 export const getPlaylistSongs = async (playlistId) => {
   const songs = await getPlaylistItems({ channelId: playlistId });
-  console.log({ songs });
-  const mappedSongs = _.reverse(
-    _.sortBy(
-      songs.map((song) => (song.priority ? song : { ...song, priority: 0 })),
-      ['priority']
+  const mappedSongs = await Promise.all(
+    _.reverse(
+      _.sortBy(
+        songs.map((song) => (song.priority ? song : { ...song, priority: 0 })),
+        ['priority']
+      )
+    ).map(
+      async ({ name, artists, uri, album, priority, addedBy, duration_ms }) => {
+        let userAvatar: any = null;
+        if (typeof addedBy === 'object') {
+          userAvatar = await getUserProfile(addedBy.id);
+        }
+        return {
+          name,
+          artist: artists[0].name,
+          uri,
+          image: album.images[album.images.length - 1].url,
+          priority,
+          addedBy: {
+            name: typeof addedBy === 'object' ? addedBy.name : null,
+            id: typeof addedBy === 'object' ? addedBy.id : null,
+            avatar: userAvatar?.user.profile.image_512
+          },
+          duration_ms
+        };
+      }
     )
-  ).map(({ name, artists, uri, album, priority }) => {
-    return {
-      name,
-      artist: artists[0].name,
-      uri,
-      image: album.images[album.images.length - 1].url,
-      priority
-    };
-  });
+  );
   return mappedSongs;
 };
