@@ -32,7 +32,8 @@ const interactiveHandler = {
         uri: songFullData.uri,
         songByArtist: songName,
         priority: 0,
-        addedBy: payload.user.username
+        addedBy: payload.user,
+        duration_ms: songFullData.duration_ms
       }
     });
     await postAddSongSuccessMessage({

@@ -2,7 +2,7 @@
   "REGION": "us-west-1",
   "ENV": "local",
   "HOSTED_ZONE_ID": "",
-  "AWS_DYNAMODB_ENDPOINT": "http://localstack-mesibot:4568",
+  "AWS_DYNAMODB_ENDPOINT": "http://localstack-mesibot:4566",
   "AWS_DEFAULT_REGION": "us-west-1",
   "ROLE_NAME": "local",
   "PUSHER_APP_ID": 1502377,

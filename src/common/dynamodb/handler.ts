@@ -48,7 +48,7 @@ export const getPlaylistItems = async ({ channelId }) => {
   if (currentPlaylist) {
     return currentPlaylist.songs;
   } else {
-    return;
+    return [];
   }
 };
 
