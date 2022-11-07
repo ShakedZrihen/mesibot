@@ -83,15 +83,9 @@ export const addWithPostision = async (req, res) => {
   return res.status(200).json({});
 };
 
-export const getPlaylistSongs = async (playlistId) => {
-  const songs = (await getPlaylistItems({ channelId: playlistId })) || [];
-  const mappedSongs = await Promise.all(
-    _.reverse(
-      _.sortBy(
-        songs.map((song) => (song.priority ? song : { ...song, priority: 0 })),
-        ['priority']
-      )
-    ).map(
+export const mapSongs = async (songs) =>
+  await Promise.all(
+    songs.map(
       async ({
         name,
         artists,
@@ -104,6 +98,7 @@ export const getPlaylistSongs = async (playlistId) => {
       }) => {
         let userAvatar: any = null;
         if (typeof addedBy === 'object') {
+          console.log({ addedBy });
           userAvatar = await getUserProfile(addedBy.id);
         }
         return {
@@ -123,5 +118,9 @@ export const getPlaylistSongs = async (playlistId) => {
       }
     )
   );
+
+export const getPlaylistSongs = async (playlistId) => {
+  const songs = (await getPlaylistItems({ channelId: playlistId })) || [];
+  const mappedSongs = await mapSongs(songs);
   return mappedSongs;
 };

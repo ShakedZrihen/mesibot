@@ -8,8 +8,12 @@ export const openChannel = async (channelId) => {
   await web.conversations.open({ channel: channelId });
 };
 export const getUserProfile = async (user_id) => {
-  const result = await web.users.info({ user: user_id });
-  return result;
+  try {
+    const result = await web.users.info({ user: user_id });
+
+    return result;
+  } catch (e) {}
+  return {};
 };
 
 export const getSongFromSlackMessage = async ({ channel_id, ts }) => {

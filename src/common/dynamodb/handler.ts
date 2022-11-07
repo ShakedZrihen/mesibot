@@ -1,3 +1,5 @@
+import spotifyEvents from '../../modules/spotify/spotify.events';
+import { mapSongs } from '../../modules/spotify/spotify.service';
 import { getItem, patchItem, putItem, TABLES } from './dynamodb-client';
 
 export const addSongToPlaylist = async ({ channelId, songInfo }) => {
@@ -59,7 +61,7 @@ const compareVotes = (firstSong, secondSong) => {
   return firstSong.priority - secondSong.priority;
 };
 
-export const updateSongVote = async ({ channelId, songInfo }) => {
+export const updateSongVote = async ({ channelId, songInfo, pusher }) => {
   if (!channelId || !songInfo) {
     console.log(
       `Details were missing: channelId=${channelId} spotifySongItem=${JSON.stringify(
@@ -87,5 +89,7 @@ export const updateSongVote = async ({ channelId, songInfo }) => {
   currentPlaylist.songs = songs;
 
   await putItem(TABLES.MESIBOT_VOTES, currentPlaylist);
+  const mappedSongsForUI = await mapSongs(songs);
+  pusher.trigger(channelId, spotifyEvents.UPDATE_PLAYLIST, mappedSongsForUI);
   console.log(`update songs ${currentPlaylist} to ${channelId} `);
 };

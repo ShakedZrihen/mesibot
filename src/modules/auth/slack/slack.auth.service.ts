@@ -14,7 +14,7 @@ export const getSlackInstaller = () => {
   return installer;
 };
 
-export const exchangeCodeForToken = async ({ code, state }) => {
+export const exchangeCodeForToken = async ({ code }) => {
   const credentials = {
     code,
     client_id: clientId,

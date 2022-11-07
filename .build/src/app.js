@@ -9,6 +9,7 @@ const express_query_boolean_1 = __importDefault(require("express-query-boolean")
 const body_parser_1 = __importDefault(require("body-parser"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const routes_1 = __importDefault(require("./routes"));
+const pusher_config_1 = __importDefault(require("./modules/pusher/pusher.config"));
 // initialize app
 exports.app = (0, express_1.default)();
 exports.app.set('trust proxy', 1);
@@ -21,6 +22,7 @@ exports.app.use(body_parser_1.default.json({
 exports.app.use((0, express_query_boolean_1.default)());
 exports.app.use((0, cookie_parser_1.default)());
 exports.app.use(body_parser_1.default.urlencoded({ extended: true }));
+(0, pusher_config_1.default)(exports.app);
 // Configure routes
 exports.app.get('/health', async (req, res) => {
     return res.sendStatus(200);
