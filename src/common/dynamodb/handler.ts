@@ -16,14 +16,17 @@ export const addSongToPlaylist = async ({ channelId, songInfo }) => {
   if (!currentPlaylist) {
     payload = {
       channel_id: channelId,
-      songs: [songInfo],
+      songs: [{ ...songInfo, inserted_index: 0 }],
       session: {}
     };
   } else {
     if (
       !currentPlaylist.songs.filter(({ uri }) => songInfo.uri === uri).length
     ) {
-      const songs = [...currentPlaylist?.songs, songInfo];
+      const songs = [
+        ...currentPlaylist?.songs,
+        { ...songInfo, inserted_index: currentPlaylist?.songs.length }
+      ];
       payload = {
         channel_id: channelId,
         songs,
