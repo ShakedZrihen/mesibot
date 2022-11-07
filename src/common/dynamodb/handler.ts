@@ -2,6 +2,23 @@ import spotifyEvents from '../../modules/spotify/spotify.events';
 import { mapSongs } from '../../modules/spotify/spotify.service';
 import { getItem, patchItem, putItem, TABLES } from './dynamodb-client';
 
+export const restartPlaylist = async (channelId, playlistName) => {
+  if (!channelId) return;
+  const currentPlaylist = await getItem(TABLES.MESIBOT_VOTES, {
+    channel_id: channelId
+  }).catch(console.error);
+  if (!currentPlaylist) {
+    return;
+  } else {
+    await putItem(TABLES.MESIBOT_VOTES, {
+      channel_id: channelId,
+      playlistName,
+      songs: [],
+      session: {}
+    });
+  }
+  console.log(`Playlist ${channelId} restarted`);
+};
 export const addSongToPlaylist = async ({ channelId, songInfo }) => {
   if (!channelId || !songInfo) {
     console.log(
@@ -30,6 +47,7 @@ export const addSongToPlaylist = async ({ channelId, songInfo }) => {
         { ...songInfo, inserted_index: currentPlaylist?.songs.length }
       ];
       payload = {
+        ...currentPlaylist,
         channel_id: channelId,
         songs,
         session: {}

@@ -1,6 +1,6 @@
+import { restartPlaylist } from '../../../../../common/dynamodb/handler';
 import {
   createNewPlaylistChannel,
-  openChannel,
   postHelpMessageToChannel
 } from '../../slack.service';
 import interactionList from '../interactive.consts';
@@ -30,6 +30,7 @@ export const createPlaylistModalHandler = async ({ payload }) => {
     interactionList.createPlaylistModal.actions.selectedChannel.options
       .currentChannel
   ) {
+    await restartPlaylist(payload.channel_id, playlistName);
     await postHelpMessageToChannel({
       channel_id: payload.channel_id,
       user_name: payload.user.username

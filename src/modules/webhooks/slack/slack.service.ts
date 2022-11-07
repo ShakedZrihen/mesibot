@@ -35,7 +35,7 @@ export const postHelpMessageToChannel = async ({
 }) => {
   const result = await web.chat.postMessage({
     text: message,
-    blocks: generateHelpBlocks(user_name),
+    blocks: generateHelpBlocks(user_name, channel_id),
     channel: channel_id
   });
   return result;

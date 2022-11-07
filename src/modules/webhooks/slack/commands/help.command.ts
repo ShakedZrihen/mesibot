@@ -1,4 +1,4 @@
-export const generateHelpBlocks = (user_name = ''): any[] =>
+export const generateHelpBlocks = (user_name = '', channel_id): any[] =>
   [
     {
       type: 'section',
@@ -12,7 +12,7 @@ export const generateHelpBlocks = (user_name = ''): any[] =>
           type: 'section',
           text: {
             type: 'mrkdwn',
-            text: `*${user_name}* just added mesiBot to your Slack team`
+            text: `*${user_name}* just started playlist using mesiBot in this channel`
           }
         }
       : null,
@@ -77,6 +77,24 @@ export const generateHelpBlocks = (user_name = ''): any[] =>
       text: {
         type: 'mrkdwn',
         text: '`/mesi help`\nWill show you this list of possible actions'
+      }
+    },
+    {
+      type: 'section',
+      text: {
+        type: 'mrkdwn',
+        text: 'You are more than welcome!'
+      },
+      accessory: {
+        type: 'button',
+        text: {
+          type: 'plain_text',
+          text: 'Go to playlist',
+          emoji: true
+        },
+        value: 'click_me_123',
+        url: `https://mesibot-ui.ngrok.io/playlist/${channel_id}`,
+        action_id: 'button-action'
       }
     }
   ].filter(Boolean);
