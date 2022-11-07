@@ -21,7 +21,7 @@ export const search = async (searchQuery) => {
 
   const {
     body: { tracks }
-  } = await spotifyApi.searchTracks(`track:${searchQuery}`);
+  } = await spotifyApi.searchTracks(searchQuery);
 
   return tracks;
 };
